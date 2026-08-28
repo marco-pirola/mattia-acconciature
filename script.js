@@ -7,10 +7,9 @@
   var backdrop = document.querySelector(".nav-backdrop");
   var navLinks = document.querySelectorAll('#primary-nav a[href^="#"]');
   var sections = document.querySelectorAll("main section[id]");
+  var year = document.getElementById("year");
   var toast = document.getElementById("toast");
   var toastTimer;
-  var year = document.getElementById("year");
-  var form = document.getElementById("booking-form");
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   if (year) {
@@ -22,10 +21,9 @@
     nav.classList.toggle("is-open", open);
     toggle.setAttribute("aria-expanded", open ? "true" : "false");
     toggle.setAttribute("aria-label", open ? "Chiudi menu" : "Apri menu");
-    if (backdrop) {
-      backdrop.hidden = !open;
-    }
+    if (backdrop) backdrop.hidden = !open;
     document.body.style.overflow = open ? "hidden" : "";
+
     if (open) {
       var firstLink = nav.querySelector("a");
       if (firstLink) firstLink.focus();
@@ -51,11 +49,15 @@
       setMenu(false);
       return;
     }
+
     if (event.key !== "Tab" || !nav || !nav.classList.contains("is-open")) return;
+
     var focusable = nav.querySelectorAll("a");
     if (!focusable.length) return;
+
     var first = focusable[0];
     var last = focusable[focusable.length - 1];
+
     if (event.shiftKey && document.activeElement === first) {
       event.preventDefault();
       last.focus();
@@ -75,12 +77,19 @@
     anchor.addEventListener("click", function (event) {
       var id = anchor.getAttribute("href");
       if (!id || id === "#") return;
+
       var target = document.querySelector(id);
       if (!target) return;
+
       event.preventDefault();
       var offset = header ? header.offsetHeight + 8 : 0;
       var top = target.getBoundingClientRect().top + window.pageYOffset - offset;
-      window.scrollTo({ top: top, behavior: reduceMotion ? "auto" : "smooth" });
+
+      window.scrollTo({
+        top: top,
+        behavior: reduceMotion ? "auto" : "smooth"
+      });
+
       if (id !== "#home") {
         history.pushState(null, "", id);
       } else {
@@ -94,9 +103,7 @@
     var current = "home";
 
     sections.forEach(function (section) {
-      if (section.offsetTop <= scrollPos) {
-        current = section.id;
-      }
+      if (section.offsetTop <= scrollPos) current = section.id;
     });
 
     var map = {
@@ -105,11 +112,11 @@
       "chi-siamo": "chi-siamo",
       galleria: "galleria",
       "perche-noi": "galleria",
-      recensioni: "recensioni",
-      orari: "contatti",
+      orari: "orari",
       faq: "contatti",
       contatti: "contatti"
     };
+
     var mapped = map[current] || current;
 
     navLinks.forEach(function (link) {
@@ -131,26 +138,10 @@
     }, 4200);
   }
 
-  document.querySelectorAll("[data-book]").forEach(function (button) {
-    button.addEventListener("click", function () {
-      var service = button.getAttribute("data-book");
-      var select = document.getElementById("service");
-      if (select && service) {
-        select.value = service;
-      }
-      showToast("Richiesta per «" + service + "» pronta. Completa il modulo in Contatti oppure chiamaci.");
-      var contact = document.getElementById("contatti");
-      if (contact) {
-        var offset = header ? header.offsetHeight + 8 : 0;
-        var top = contact.getBoundingClientRect().top + window.pageYOffset - offset;
-        window.scrollTo({ top: top, behavior: reduceMotion ? "auto" : "smooth" });
-        var name = document.getElementById("name");
-        if (name) {
-          window.setTimeout(function () {
-            name.focus();
-          }, reduceMotion ? 0 : 450);
-        }
-      }
+  document.querySelectorAll('.btn[href*="[NUMERO_WHATSAPP]"]').forEach(function (link) {
+    link.addEventListener("click", function (event) {
+      event.preventDefault();
+      showToast("Numero WhatsApp da inserire prima della pubblicazione.");
     });
   });
 
@@ -173,34 +164,6 @@
     });
   });
 
-  if (form) {
-    form.addEventListener("submit", function (event) {
-      event.preventDefault();
-      var name = form.querySelector("#name");
-      var phone = form.querySelector("#phone");
-      var service = form.querySelector("#service");
-      var valid = true;
-
-      [name, phone, service].forEach(function (field) {
-        var row = field.closest(".form-row");
-        var ok = field.value.trim() !== "";
-        if (row) row.classList.toggle("is-invalid", !ok);
-        if (!ok) valid = false;
-      });
-
-      if (!valid) {
-        showToast("Compila nome, telefono e servizio per inviare la richiesta.");
-        return;
-      }
-
-      showToast("Grazie, " + name.value.trim() + ". Ti ricontattiamo a breve per confermare «" + service.value + "».");
-      form.reset();
-      form.querySelectorAll(".is-invalid").forEach(function (row) {
-        row.classList.remove("is-invalid");
-      });
-    });
-  }
-
   if (!reduceMotion && "IntersectionObserver" in window) {
     var observer = new IntersectionObserver(
       function (entries) {
@@ -222,4 +185,5 @@
       el.classList.add("is-visible");
     });
   }
+
 })();
