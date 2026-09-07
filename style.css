@@ -1121,6 +1121,22 @@ strong {
   color: var(--cream-muted);
 }
 
+.site-footer a:hover {
+  color: var(--gold-bright);
+}
+
+.footer-map-link {
+  display: inline-block;
+
+  color: var(--cream-muted);
+
+  transition: color 0.2s ease;
+}
+
+.footer-map-link:hover {
+  color: var(--gold-bright);
+}
+
 .footer-bottom {
   display: flex;
   justify-content: space-between;
