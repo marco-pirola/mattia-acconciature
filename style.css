@@ -425,7 +425,6 @@ strong {
   color: var(--cream);
 }
 
-/* HERO FOTO 4:3 — mostra tutta l'immagine */
 .hero-visual {
   width: 100%;
   aspect-ratio: 4 / 3;
@@ -474,17 +473,16 @@ strong {
 
 .service-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+
+  /*
+   * 12 colonne:
+   * ogni card occupa 3 colonne.
+   * Le prime 8 riempiono due righe.
+   * Le ultime 3 vengono centrate nella terza riga.
+   */
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+
   gap: 1.25rem;
-}
-
-/* Ultime 2 card centrate nella terza riga */
-.service-card-bottom:nth-last-child(2) {
-  grid-column: 2;
-}
-
-.service-card-bottom:last-child {
-  grid-column: 3;
 }
 
 .service-card {
@@ -496,6 +494,8 @@ strong {
   min-width: 0;
   min-height: 100%;
 
+  grid-column: span 3;
+
   padding: 1.6rem 1.4rem 1.4rem;
 
   background: var(--bg-card);
@@ -504,6 +504,18 @@ strong {
   transition:
     border-color 0.25s ease,
     transform 0.25s ease;
+}
+
+.service-card-bottom:nth-last-child(3) {
+  grid-column: 2 / span 3;
+}
+
+.service-card-bottom:nth-last-child(2) {
+  grid-column: 5 / span 3;
+}
+
+.service-card-bottom:last-child {
+  grid-column: 8 / span 3;
 }
 
 .service-card:hover {
@@ -1195,6 +1207,15 @@ strong {
     grid-template-columns: repeat(2, 1fr);
   }
 
+  /*
+   * Su tablet torniamo alla griglia normale:
+   * niente posizionamento speciale delle ultime 3.
+   */
+  .service-card {
+    grid-column: auto;
+  }
+
+  .service-card-bottom:nth-last-child(3),
   .service-card-bottom:nth-last-child(2),
   .service-card-bottom:last-child {
     grid-column: auto;
@@ -1386,6 +1407,13 @@ strong {
   .service-grid,
   .benefit-grid {
     grid-template-columns: 1fr;
+  }
+
+  .service-card,
+  .service-card-bottom:nth-last-child(3),
+  .service-card-bottom:nth-last-child(2),
+  .service-card-bottom:last-child {
+    grid-column: auto;
   }
 
   .about-photo {
