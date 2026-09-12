@@ -384,7 +384,7 @@ strong {
 
 .hero-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 0.85fr 1.15fr;
   align-items: center;
   gap: 3rem;
 }
@@ -431,10 +431,44 @@ strong {
 
   overflow: hidden;
 
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
+  position: relative;
 
-  box-shadow: var(--shadow);
+  border: 4px solid var(--gold);
+
+  border-radius: 2px;
+
+  box-shadow:
+    0 0 0 2px rgba(224, 192, 122, 0.45),
+    0 0 0 7px rgba(198, 161, 91, 0.12),
+    0 24px 80px rgba(0, 0, 0, 0.45);
+
+  transform: translateX(2rem);
+}
+
+.hero-visual::before {
+  content: "";
+
+  position: absolute;
+  inset: 5px;
+
+  z-index: 2;
+
+  pointer-events: none;
+
+  border: 1px solid rgba(243, 234, 216, 0.45);
+}
+
+.hero-visual::after {
+  content: "";
+
+  position: absolute;
+  inset: 9px;
+
+  z-index: 2;
+
+  pointer-events: none;
+
+  border: 1px solid rgba(198, 161, 91, 0.55);
 }
 
 .hero-photo {
@@ -676,11 +710,38 @@ strong {
 }
 
 .about-photo {
-  width: 100%;
-  height: 100%;
-  min-height: 500px;
+  display: block;
 
-  object-fit: cover;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+
+  object-fit: contain;
+  object-position: center;
+
+  background: #09090a;
+}
+
+.about-photo-certificati {
+  width: 60%;
+  height: auto;
+  min-height: 0;
+  margin: 2rem auto 0;
+
+  border: none;
+  box-shadow: none;
+
+  object-fit: contain;
+}
+
+.about-photo-prodotto {
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  margin: 1.5rem 0 0;
+
+  object-fit: contain;
+  object-position: center;
 }
 
 .about-copy p {
@@ -1269,6 +1330,10 @@ strong {
 
   .hero-visual {
     order: -1;
+  }
+
+  .hero-visual {
+    transform: none;
   }
 
   .gallery-grid {
